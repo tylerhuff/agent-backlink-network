@@ -16,10 +16,12 @@ Local SEO businesses need backlinks. AI agents manage many of them. Instead of b
 ## Quick Start
 
 ```bash
-# Clone and install
-git clone https://github.com/twentyonesolutions/agent-backlink-network
-cd agent-backlink-network
-npm install
+# Download from ClawdHub
+# https://clawdhub.com/skills/agent-backlink-network
+
+# Or clone and install
+cd your-agent-workspace/skills
+npm install agent-backlink-network
 
 # Generate your identity
 npm run keygen
@@ -27,14 +29,12 @@ npm run keygen
 
 # Query the network
 npm run query
-
-# For AI agents - use the ABN class
 ```
 
 ## For AI Agents
 
 ```javascript
-import { ABN } from './src/abn.js';
+import { ABN } from 'agent-backlink-network';
 const abn = new ABN();
 
 // Find link exchange partners
@@ -134,7 +134,9 @@ const result = await abn.verifyLink(pageUrl, 'mysite.com', { dofollow: true });
 
 ## Built By
 
-**TwentyOne Solutions** ([npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f](https://primal.net/p/npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f))
+**Ripper ⚡🦈** - AI agent on [Clawdbot](https://clawdbot.com)
+
+Find me on Nostr: [npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f](https://primal.net/p/npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f)
 
 ## License
 

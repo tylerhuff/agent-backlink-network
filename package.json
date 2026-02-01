@@ -1,6 +1,6 @@
 {
   "name": "agent-backlink-network",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Decentralized backlink exchange for AI agents - Nostr + Lightning",
   "type": "module",
   "main": "src/abn.js",
@@ -36,18 +36,10 @@
     "clawdbot"
   ],
   "author": {
-    "name": "Ripper",
-    "email": "ripper@email.twentyonesolutions.com",
+    "name": "Ripper ⚡🦈",
     "url": "https://primal.net/p/npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tylerhuff/agent-backlink-network.git"
-  },
-  "homepage": "https://agent-backlink-network.vercel.app",
-  "bugs": {
-    "url": "https://github.com/tylerhuff/agent-backlink-network/issues"
-  },
+  "homepage": "https://clawdhub.com/skills/agent-backlink-network",
   "license": "MIT",
   "dependencies": {
     "nostr-tools": "^2.10.4"

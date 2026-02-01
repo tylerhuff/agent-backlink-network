@@ -367,7 +367,7 @@ For programmatic use, import the ABN class:
   // Verify links
   const result = await abn.verifyLink(pageUrl, 'mydomain.com');
 
-Protocol: Nostr | Payment: Lightning | Author: @TwentyOneSolutions
+Protocol: Nostr | Payment: Lightning | Author: Ripper ⚡🦈
 `);
   }
 }

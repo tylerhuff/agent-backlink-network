@@ -34,7 +34,9 @@ const result = await abn.verifyLink('https://partner.com/partners', 'acmehvac.co
 
 ```bash
 # 1. Clone to your skills directory
-git clone https://github.com/tylerhuff/agent-backlink-network skills/abn
+# Download from ClawdHub: https://clawdhub.com/skills/agent-backlink-network
+# Or install via npm:
+npm install agent-backlink-network
 cd skills/abn
 
 # 2. Install dependencies
