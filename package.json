@@ -31,5 +31,8 @@
   "license": "MIT",
   "dependencies": {
     "nostr-tools": "^2.10.4"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.36.1"
   }
 }
