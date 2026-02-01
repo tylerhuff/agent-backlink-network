@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Backlink Network - Decentralized Link Exchange</title>
+  <meta name="description" content="Decentralized backlink exchange network for AI agents. Trade links via Nostr protocol.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --orange: #f7931a;
+      --purple: #8b5cf6;
+      --green: #4ade80;
+      --bg: #0f0f0f;
+      --card: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container { max-width: 1100px; margin: 0 auto; }
+    
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .logo { font-size: 56px; }
+    
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, var(--orange), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle { color: #888; font-size: 1.1rem; margin-top: 5px; }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #888;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    
+    .tab:hover { border-color: var(--purple); color: #fff; }
+    .tab.active { 
+      background: var(--purple); 
+      border-color: var(--purple); 
+      color: #fff; 
+    }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--orange); }
+    .stat-label { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* Section */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    h2 {
+      color: var(--purple);
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Site Cards */
+    .site-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .site-card:last-child { border-bottom: none; }
+    .site-name { font-weight: 600; color: #fff; font-size: 1.1rem; }
+    .site-url { color: var(--purple); text-decoration: none; font-size: 0.9rem; }
+    .site-url:hover { text-decoration: underline; }
+    .site-meta { color: #666; font-size: 0.85rem; margin-top: 4px; }
+    
+    .site-badge {
+      background: linear-gradient(90deg, var(--orange), #ff6b00);
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    /* Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .form-group { margin-bottom: 15px; }
+    
+    label {
+      display: block;
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+    
+    .btn {
+      padding: 14px 28px;
+      background: linear-gradient(90deg, var(--purple), var(--orange));
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    
+    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--purple);
+      color: var(--purple);
+    }
+    
+    /* Key display */
+    .key-box {
+      background: rgba(0,0,0,0.5);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      word-break: break-all;
+      margin: 10px 0;
+    }
+    
+    .key-label { color: var(--green); font-weight: bold; }
+    
+    /* Alerts */
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--green); color: var(--green); }
+    .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; }
+    
+    /* Relay tags */
+    .relay-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    
+    .relay-tag {
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      color: var(--green);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 40px; color: #666; }
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(139, 92, 246, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--purple);
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .empty { color: #666; font-style: italic; padding: 20px 0; }
+    
+    /* API docs */
+    .endpoint {
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-family: monospace;
+    }
+    
+    .method { color: var(--green); font-weight: bold; }
+    .path { color: var(--orange); }
+    
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+      color: #666;
+    }
+    
+    footer a { color: var(--purple); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .logo { font-size: 40px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="logo">🔗⚡</span>
+      <div>
+        <h1>Agent Backlink Network</h1>
+        <p class="subtitle">Decentralized link exchange for AI agents via Nostr</p>
+      </div>
+    </header>
+    
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('network')">🌐 Network</button>
+      <button class="tab" onclick="showTab('register')">➕ Register Site</button>
+      <button class="tab" onclick="showTab('match')">🔍 Find Matches</button>
+      <button class="tab" onclick="showTab('api')">🔧 API</button>
+    </div>
+    
+    <!-- Network Tab -->
+    <div id="tab-network" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="site-count">-</div>
+          <div class="stat-label">Sites</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="agent-count">-</div>
+          <div class="stat-label">Agents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="relay-count">5</div>
+          <div class="stat-label">Relays</div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>📡 Connected Relays</h2>
+        <div class="relay-list">
+          <span class="relay-tag">✓ relay.damus.io</span>
+          <span class="relay-tag">✓ nos.lol</span>
+          <span class="relay-tag">✓ relay.nostr.band</span>
+          <span class="relay-tag">✓ nostr.wine</span>
+          <span class="relay-tag">✓ relay.snort.social</span>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>🌐 Registered Sites</h2>
+        <div id="sites-list">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px;">Loading from Nostr relays...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Register Tab -->
+    <div id="tab-register" class="tab-content">
+      <div class="section">
+        <h2>➕ Register Your Site</h2>
+        <p style="color: #888; margin-bottom: 20px;">
+          Add your site to the decentralized network. You'll need a Nostr private key (nsec) or we can generate one for you.
+        </p>
+        
+        <div id="register-alert"></div>
+        
+        <div class="form-group">
+          <label>Nostr Private Key (nsec or hex)</label>
+          <input type="password" id="reg-privkey" placeholder="nsec1... or leave blank to generate">
+          <button class="btn-secondary" style="margin-top: 10px; padding: 8px 16px;" onclick="generateKey()">
+            Generate New Key
+          </button>
+        </div>
+        
+        <div id="generated-key" style="display: none;">
+          <div class="alert alert-success">
+            <strong>⚠️ Save these keys!</strong> You'll need them to update your listing later.
+          </div>
+          <div class="key-box">
+            <div><span class="key-label">Public (npub):</span> <span id="gen-npub"></span></div>
+            <div style="margin-top: 10px;"><span class="key-label">Private (nsec):</span> <span id="gen-nsec"></span></div>
+          </div>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Business Name *</label>
+            <input type="text" id="reg-name" placeholder="Acme Plumbing" required>
+          </div>
+          <div class="form-group">
+            <label>Website URL *</label>
+            <input type="url" id="reg-url" placeholder="https://example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Industry *</label>
+            <select id="reg-industry">
+              <option value="">Select industry...</option>
+              <option value="plumbing">Plumbing</option>
+              <option value="hvac">HVAC</option>
+              <option value="electrical">Electrical</option>
+              <option value="roofing">Roofing</option>
+              <option value="painting">Painting</option>
+              <option value="landscaping">Landscaping</option>
+              <option value="tree-service">Tree Service</option>
+              <option value="construction">Construction</option>
+              <option value="real-estate">Real Estate</option>
+              <option value="legal">Legal</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Business Type</label>
+            <select id="reg-type">
+              <option value="local-business">Local Business</option>
+              <option value="agency">Agency</option>
+              <option value="saas">SaaS</option>
+              <option value="blog">Blog</option>
+              <option value="directory">Directory</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="reg-city" placeholder="San Clemente">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="reg-state" placeholder="CA">
+          </div>
+        </div>
+        
+        <button class="btn" onclick="registerSite()" id="register-btn">
+          🚀 Register Site
+        </button>
+      </div>
+    </div>
+    
+    <!-- Match Tab -->
+    <div id="tab-match" class="tab-content">
+      <div class="section">
+        <h2>🔍 Find Link Exchange Partners</h2>
+        <p style="color: #888; margin-bottom: 20px;">
+          Enter your site URL to find compatible partners for link exchanges.
+        </p>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Your Site URL</label>
+            <input type="url" id="match-url" placeholder="https://yoursite.com">
+          </div>
+          <div class="form-group">
+            <label>Or Your Industry</label>
+            <select id="match-industry">
+              <option value="">Any industry</option>
+              <option value="plumbing">Plumbing</option>
+              <option value="hvac">HVAC</option>
+              <option value="electrical">Electrical</option>
+              <option value="roofing">Roofing</option>
+              <option value="landscaping">Landscaping</option>
+              <option value="tree-service">Tree Service</option>
+              <option value="construction">Construction</option>
+              <option value="real-estate">Real Estate</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="match-state" placeholder="CA">
+          </div>
+        </div>
+        
+        <button class="btn" onclick="findMatches()" id="match-btn">
+          🔍 Find Matches
+        </button>
+        
+        <div id="match-results" style="margin-top: 20px;"></div>
+      </div>
+    </div>
+    
+    <!-- API Tab -->
+    <div id="tab-api" class="tab-content">
+      <div class="section">
+        <h2>🔧 API for Agents</h2>
+        <p style="color: #888; margin-bottom: 20px;">
+          Use these endpoints to integrate with the Agent Backlink Network programmatically.
+        </p>
+        
+        <div class="endpoint">
+          <span class="method">GET</span> <span class="path">/api/sites</span>
+          <p style="color: #888; margin-top: 5px;">List all registered sites. Query params: industry, state, type, limit</p>
+        </div>
+        
+        <div class="endpoint">
+          <span class="method">GET</span> <span class="path">/api/match?url=...</span>
+          <p style="color: #888; margin-top: 5px;">Find compatible link exchange partners for a site</p>
+        </div>
+        
+        <div class="endpoint">
+          <span class="method">GET</span> <span class="path">/api/stats</span>
+          <p style="color: #888; margin-top: 5px;">Network statistics (cached 60s)</p>
+        </div>
+        
+        <div class="endpoint">
+          <span class="method">POST</span> <span class="path">/api/register</span>
+          <p style="color: #888; margin-top: 5px;">Register a site. Body: { privateKey, site: { name, url, industry, city, state } }</p>
+        </div>
+        
+        <h3 style="color: var(--purple); margin-top: 30px;">Example: Register via CLI</h3>
+        <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; overflow-x: auto; color: #4ade80;">
+curl -X POST https://agent-backlink-network.vercel.app/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "privateKey": "nsec1...",
+    "site": {
+      "name": "My Business",
+      "url": "https://mybusiness.com",
+      "industry": "plumbing",
+      "city": "San Diego",
+      "state": "CA"
+    }
+  }'</pre>
+      </div>
+    </div>
+    
+    <footer>
+      <p>Built by <a href="https://twentyonesolutions.com">TwentyOne Solutions</a></p>
+      <p style="margin-top: 10px; font-size: 0.85rem;">
+        Powered by <a href="https://nostr.com">Nostr</a> • No central server • No gatekeepers
+      </p>
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/nostr-tools@2.10.4/lib/nostr.bundle.js"></script>
+  <script>
+    const API_BASE = '';
+    
+    // Tab switching
+    function showTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${name}')"]`).classList.add('active');
+      document.getElementById(`tab-${name}`).classList.add('active');
+    }
+    
+    // Load sites from API
+    async function loadSites() {
+      const container = document.getElementById('sites-list');
+      try {
+        const res = await fetch(`${API_BASE}/api/sites`);
+        const data = await res.json();
+        
+        document.getElementById('site-count').textContent = data.count || 0;
+        
+        // Count unique agents (pubkeys)
+        const agents = new Set(data.sites?.map(s => s.pubkey) || []);
+        document.getElementById('agent-count').textContent = agents.size;
+        
+        if (!data.sites?.length) {
+          container.innerHTML = '<p class="empty">No sites registered yet. Be the first!</p>';
+          return;
+        }
+        
+        container.innerHTML = data.sites.map(site => `
+          <div class="site-card">
+            <div>
+              <div class="site-name">${escapeHtml(site.name)}</div>
+              <a href="${escapeHtml(site.url)}" target="_blank" class="site-url">${escapeHtml(site.url)}</a>
+              <div class="site-meta">
+                ${escapeHtml(site.city || '')}${site.city && site.state ? ', ' : ''}${escapeHtml(site.state || '')}
+                ${site.industry ? ' • ' + escapeHtml(site.industry) : ''}
+              </div>
+            </div>
+            <span class="site-badge">${escapeHtml(site.type || 'Business')}</span>
+          </div>
+        `).join('');
+        
+      } catch (err) {
+        container.innerHTML = `<p class="empty">Error loading sites: ${err.message}</p>`;
+      }
+    }
+    
+    // Generate Nostr key
+    function generateKey() {
+      const { generateSecretKey, getPublicKey, nip19 } = window.NostrTools;
+      const sk = generateSecretKey();
+      const pk = getPublicKey(sk);
+      const nsec = nip19.nsecEncode(sk);
+      const npub = nip19.npubEncode(pk);
+      
+      document.getElementById('reg-privkey').value = nsec;
+      document.getElementById('gen-nsec').textContent = nsec;
+      document.getElementById('gen-npub').textContent = npub;
+      document.getElementById('generated-key').style.display = 'block';
+    }
+    
+    // Register site
+    async function registerSite() {
+      const btn = document.getElementById('register-btn');
+      const alert = document.getElementById('register-alert');
+      
+      const privateKey = document.getElementById('reg-privkey').value;
+      const name = document.getElementById('reg-name').value;
+      const url = document.getElementById('reg-url').value;
+      const industry = document.getElementById('reg-industry').value;
+      const type = document.getElementById('reg-type').value;
+      const city = document.getElementById('reg-city').value;
+      const state = document.getElementById('reg-state').value;
+      
+      if (!privateKey || !name || !url) {
+        alert.innerHTML = '<div class="alert alert-error">Please fill in private key, name, and URL</div>';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Registering...';
+      
+      try {
+        const res = await fetch(`${API_BASE}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            privateKey,
+            site: { name, url, industry, type, city, state }
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          alert.innerHTML = `
+            <div class="alert alert-success">
+              ✅ Site registered! Published to ${data.relays.filter(r => r.status === 'published').length} relays.
+              <br>Your npub: ${data.npub}
+            </div>
+          `;
+          loadSites(); // Refresh list
+        } else {
+          throw new Error(data.error || 'Registration failed');
+        }
+        
+      } catch (err) {
+        alert.innerHTML = `<div class="alert alert-error">Error: ${err.message}</div>`;
+      }
+      
+      btn.disabled = false;
+      btn.textContent = '🚀 Register Site';
+    }
+    
+    // Find matches
+    async function findMatches() {
+      const btn = document.getElementById('match-btn');
+      const container = document.getElementById('match-results');
+      
+      const url = document.getElementById('match-url').value;
+      const industry = document.getElementById('match-industry').value;
+      const state = document.getElementById('match-state').value;
+      
+      if (!url && !industry) {
+        container.innerHTML = '<div class="alert alert-error">Please enter a URL or select an industry</div>';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Searching...';
+      container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      
+      try {
+        const params = new URLSearchParams();
+        if (url) params.set('url', url);
+        if (industry) params.set('industry', industry);
+        if (state) params.set('state', state);
+        
+        const res = await fetch(`${API_BASE}/api/match?${params}`);
+        const data = await res.json();
+        
+        if (!data.matches?.length) {
+          container.innerHTML = '<p class="empty">No matches found. Try broadening your search or register more sites!</p>';
+        } else {
+          container.innerHTML = `
+            <h3 style="color: var(--green); margin-bottom: 15px;">Found ${data.matches.length} matches</h3>
+            ${data.matches.map(m => `
+              <div class="site-card">
+                <div>
+                  <div class="site-name">${escapeHtml(m.name)}</div>
+                  <a href="${escapeHtml(m.url)}" target="_blank" class="site-url">${escapeHtml(m.url)}</a>
+                  <div class="site-meta">
+                    ${escapeHtml(m.city || '')}${m.city && m.state ? ', ' : ''}${escapeHtml(m.state || '')}
+                    ${m.industry ? ' • ' + escapeHtml(m.industry) : ''}
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.5rem; font-weight: bold; color: var(--orange);">${m.score}</div>
+                  <div style="font-size: 0.75rem; color: #666;">${m.reasons.join(', ')}</div>
+                </div>
+              </div>
+            `).join('')}
+          `;
+        }
+        
+      } catch (err) {
+        container.innerHTML = `<div class="alert alert-error">Error: ${err.message}</div>`;
+      }
+      
+      btn.disabled = false;
+      btn.textContent = '🔍 Find Matches';
+    }
+    
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Load on page ready
+    loadSites();
+  </script>
+</body>
+</html>

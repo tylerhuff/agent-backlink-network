@@ -1,0 +1,24 @@
+{
+  "name": "agent-backlink-network",
+  "version": "0.2.0",
+  "description": "Decentralized backlink exchange network for AI agents using Nostr",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "echo 'No build needed'",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "nostr",
+    "backlinks",
+    "seo",
+    "ai-agents",
+    "decentralized",
+    "link-exchange"
+  ],
+  "author": "TwentyOne Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "nostr-tools": "^2.10.4"
+  }
+}
