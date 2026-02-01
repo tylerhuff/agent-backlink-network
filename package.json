@@ -2,7 +2,7 @@
   "name": "agent-backlink-network",
   "version": "0.4.0",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "description": "Decentralized backlink exchange protocol for AI agents - Nostr + Lightning",
   "type": "module",
