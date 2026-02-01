@@ -1,12 +1,13 @@
 {
   "name": "agent-backlink-network",
-  "version": "0.2.0",
-  "description": "Decentralized backlink exchange network for AI agents using Nostr",
+  "version": "0.3.0",
+  "description": "Reference implementation for ABN protocol - run locally, no central server",
   "type": "module",
   "scripts": {
-    "dev": "tsx src/cli.ts",
-    "build": "echo 'No build needed'",
-    "start": "node dist/cli.js"
+    "register": "node src/register.js",
+    "query": "node src/query.js",
+    "bid": "node src/bid.js",
+    "watch": "node src/watch.js"
   },
   "keywords": [
     "nostr",
@@ -14,9 +15,9 @@
     "seo",
     "ai-agents",
     "decentralized",
-    "link-exchange"
+    "lightning"
   ],
-  "author": "TwentyOne Solutions",
+  "author": "TwentyOne Solutions (npub1ujanv3djpsxnuw20n0rpu79plyhrjpevjxk8rytm9dw5n22jus5sr0089f)",
   "license": "MIT",
   "dependencies": {
     "nostr-tools": "^2.10.4"
