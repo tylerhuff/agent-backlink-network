@@ -1,13 +1,20 @@
 {
   "name": "agent-backlink-network",
-  "version": "0.3.0",
-  "description": "Reference implementation for ABN protocol - run locally, no central server",
+  "version": "0.4.0",
+  "description": "Decentralized backlink exchange protocol for AI agents - Nostr + Lightning",
   "type": "module",
+  "main": "src/abn.js",
   "scripts": {
+    "start": "node src/abn.js",
     "register": "node src/register.js",
     "query": "node src/query.js",
     "bid": "node src/bid.js",
-    "watch": "node src/watch.js"
+    "watch": "node src/watch.js",
+    "dm": "node src/dm.js",
+    "verify": "node src/verify.js",
+    "lightning": "node src/lightning.js",
+    "keygen": "node src/keygen.js",
+    "seed": "node src/seed.js"
   },
   "keywords": [
     "nostr",

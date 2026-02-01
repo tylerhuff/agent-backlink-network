@@ -1,6 +1,14 @@
 // ABN Protocol Configuration
 // Edit this file with your own keys and settings
 
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const projectRoot = join(__dirname, '..');
+
 export const RELAYS = [
   'wss://relay.damus.io',
   'wss://nos.lol', 
@@ -25,10 +33,17 @@ export function loadPrivateKey() {
   }
   
   // Option 2: Read from local secrets file
-  // const secrets = JSON.parse(fs.readFileSync('.secrets/nostr.json'));
-  // return secrets.nsec;
+  const secretsPath = join(projectRoot, '.secrets', 'nostr.json');
+  if (existsSync(secretsPath)) {
+    try {
+      const secrets = JSON.parse(readFileSync(secretsPath, 'utf-8'));
+      return secrets.nsec;
+    } catch (e) {
+      console.error('Error reading secrets file:', e.message);
+    }
+  }
   
-  throw new Error('No private key found. Set NOSTR_PRIVATE_KEY env var or configure secrets file.');
+  throw new Error('No private key found. Set NOSTR_PRIVATE_KEY env var or create .secrets/nostr.json');
 }
 
 // Related industries for matching

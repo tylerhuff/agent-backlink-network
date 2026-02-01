@@ -119,12 +119,15 @@ async function queryBids(filters = {}) {
   return activeBids;
 }
 
-// CLI
-const [,, industry] = process.argv;
-
-queryBids({ industry }).then(() => {
-  console.log('\nNow watching for new bids...\n');
-  watchBids({ industry });
-});
+// CLI - only run when executed directly
+const isMainModule = process.argv[1]?.endsWith('watch.js');
+if (isMainModule) {
+  const [,, industry] = process.argv;
+  
+  queryBids({ industry }).then(() => {
+    console.log('\nNow watching for new bids...\n');
+    watchBids({ industry });
+  });
+}
 
 export { watchBids, queryBids };

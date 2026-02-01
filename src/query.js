@@ -85,16 +85,19 @@ function findMatches(yourSite, allSites) {
     .sort((a, b) => b.matchScore - a.matchScore);
 }
 
-// CLI usage
-const [,, industry, state] = process.argv;
-
-if (industry || state) {
-  querySites({ industry, state });
-} else {
-  console.log('Usage: node src/query.js [industry] [state]');
-  console.log('Example: node src/query.js plumbing CA');
-  console.log('\nRunning without filters...\n');
-  querySites({});
+// CLI usage - only run when executed directly
+const isMainModule = process.argv[1]?.endsWith('query.js');
+if (isMainModule) {
+  const [,, industry, state] = process.argv;
+  
+  if (industry || state) {
+    querySites({ industry, state });
+  } else {
+    console.log('Usage: node src/query.js [industry] [state]');
+    console.log('Example: node src/query.js plumbing CA');
+    console.log('\nRunning without filters...\n');
+    querySites({});
+  }
 }
 
 export { querySites, findMatches };
