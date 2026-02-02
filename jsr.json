@@ -1,0 +1,5 @@
+{
+  "name": "@ripper/agent-backlink-network",
+  "version": "0.4.0",
+  "exports": "./src/abn.js"
+}
